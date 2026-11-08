@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Void</title><style>
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
+:root{--paper:#f4e9d5;--ink:#30271f;--muted:#77685b;--chip:#e7d6bb;--accent:#8c493e}
+*{box-sizing:border-box}html{min-height:100%;background:#111b29}body{margin:0;color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+.sky{position:relative;isolation:isolate;min-height:100vh;background:radial-gradient(ellipse at 52% 72%,#ae715f 0%,#5e4850 29%,transparent 58%),linear-gradient(180deg,#101b2d 0%,#293047 38%,#75515b 74%,#b17b60 100%);padding:20px 15px 85px;overflow:hidden}
+.sky:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.7;background-image:radial-gradient(1px 1px at 11% 9%,#fff 95%,transparent),radial-gradient(1px 1px at 71% 17%,#fff 95%,transparent),radial-gradient(2px 2px at 39% 12%,#fff 95%,transparent),radial-gradient(1px 1px at 82% 29%,#fff 95%,transparent),radial-gradient(1px 1px at 23% 34%,#fff 95%,transparent),radial-gradient(1px 1px at 94% 6%,#fff 95%,transparent),radial-gradient(1px 1px at 55% 39%,#fff 95%,transparent);background-size:310px 380px}
+.sky:after{content:'';position:absolute;z-index:-1;bottom:-2px;left:-5%;width:110%;height:160px;background:#19212c;clip-path:polygon(0 100%,0 76%,9% 73%,14% 65%,19% 69%,23% 57%,31% 59%,36% 72%,47% 72%,52% 60%,57% 61%,61% 49%,68% 53%,72% 69%,83% 65%,89% 73%,100% 63%,100% 100%);opacity:.7}
+.shell{max-width:760px;margin:auto}.brand{text-align:center;color:#f6e9d8;padding:22px 0 29px}.star{font-size:41px;line-height:1;color:#f5d8aa;text-shadow:0 0 25px #e8bd9777}.brand h1{font-size:clamp(52px,10vw,83px);font-style:italic;font-weight:400;letter-spacing:-3px;line-height:1.08;margin:10px 0 12px}.brand small{letter-spacing:3px;font:10px system-ui,-apple-system,sans-serif;color:#e9cdb9}.brand .sub{font:italic 14px Georgia,serif;color:#e8cbb6;margin:13px 0 0}
+.paper{position:relative;background:var(--paper);background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,#8a6c4610 32px);border:1px solid #e3cba7;border-radius:6px;padding:22px 20px;box-shadow:0 5px 0 #b99272,0 20px 70px #090e1b99}
+.paper:before,.paper:after{content:'✦';position:absolute;color:#a6805d;font-size:13px;top:11px}.paper:before{left:12px}.paper:after{right:12px}
+.capture{display:flex;gap:8px;align-items:center;margin-bottom:16px}button,input,textarea{font:inherit}button{touch-action:manipulation}
+#newText{width:100%;min-height:102px;resize:vertical;border:1px solid #cbb697;background:#fff9ec;border-radius:4px;padding:17px 16px;color:var(--ink);font-size:19px;line-height:1.5;box-shadow:inset 0 1px 5px #9c7c5110}#newText::placeholder{color:#9b8774;font-style:italic}
+.actions{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;align-items:center;margin:12px 0 24px}button{border:1px solid #cbb89b;border-radius:3px;padding:10px 15px;background:var(--chip);color:var(--ink);cursor:pointer;transition:background .15s ease}button.primary{background:var(--accent);border-color:var(--accent);color:#fff6e8;letter-spacing:.2px}button:hover{filter:brightness(.96)}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #a8664d;outline-offset:2px}
+#search{width:100%;padding:13px 14px;border-radius:4px;border:1px solid #ccb89a;background:#fdf5e7;margin:0 0 14px;font-size:15px}#search::placeholder{font-style:italic;color:#988571}
+.tags{display:flex;gap:7px;overflow-x:auto;padding:0 0 17px}.tags button{white-space:nowrap;font:12px system-ui,-apple-system,sans-serif;padding:8px 13px;border-radius:30px}.tags button.active{background:#34313a;border-color:#34313a;color:white}
+.entry{padding:24px 3px 21px;border-top:1px solid #ccb99b}.date{font:10px system-ui,-apple-system,sans-serif;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);margin-bottom:12px}.body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:20px;line-height:1.55}.entryTags{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}.entryTags button{font:12px system-ui,-apple-system,sans-serif;padding:6px 10px;border-radius:20px;background:#eadcc6;border-color:#dfccb0;color:#6e5146}.entryActions{display:flex;gap:7px;margin-top:14px}.entryActions button{font:11px system-ui,-apple-system,sans-serif;background:transparent;border:1px solid #d3c1a7;padding:6px 12px;color:#786656}.empty{text-align:center;color:var(--muted);padding:45px 0;font-style:italic}.footer{text-align:center;color:#f1dac6;font:11px system-ui,-apple-system,sans-serif;margin-top:24px;letter-spacing:.3px}
+@media(min-width:700px){.sky{padding-top:45px}.paper{padding:37px 40px}.brand{padding-bottom:36px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* Typewriter lettering only for authored thoughts, not navigation. */
+#newText,.body{font-family:"Special Elite","American Typewriter","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.35px}
+#newText{font-size:18px;line-height:1.65}
+.body{font-size:20px;line-height:1.7}
+/* Soft ink impression: slight ribbon bleed without compromising readability. */
+#newText,.body{color:#3b3029;text-shadow:none;-webkit-font-smoothing:auto;font-synthesis:none}
+.body{letter-spacing:-.2px}
+#newText::placeholder{text-shadow:none}
+</style></head><body><main class="sky"><div class="shell">
+<header class="brand"><div class="star" aria-hidden="true">✳</div><h1>The Void</h1><small>AN ARCHIVE OF THE UNFINISHED</small><p class="sub">A place for everything floating around up there.</p></header>
+<section class="paper"><textarea id="newText" placeholder="What's on your mind? Add #hashtags if you like."></textarea>
+<div class="actions"><span id="suggestions" style="font:12px system-ui;color:#796d63"></span><button class="primary" id="save">✳ Send into the void</button></div>
+<input id="search" type="search" placeholder="Search the stars…"><div class="tags" id="tags"></div><div id="feed"></div>
+<div class="actions" style="margin-top:25px"><button id="export">Export backup</button><button id="import">Import backup</button><input type="file" id="file" accept=".json,application/json" hidden></div>
+</section><div class="footer">A little universe of your own · Remember to export backups.</div></div></main>
+<script>
+const KEY='the-void-notes-v1';let notes=[],filter='all';const $=s=>document.querySelector(s);
+try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch{notes=[]}
+const rules={songwriting:/song|lyric|melody|chord|verse|chorus/i,reading:/book|read|author|quote/i,reflection:/feel|wonder|think|meaning|life|acceptance/i,ideas:/idea|what if|imagine/i,todo:/need to|remember to|look into|buy |call |email /i,music:/guitar|gig|venue|record|music/i};
+function hashtags(t){return [...new Set((t.match(/#[\p{L}\p{N}_-]+/gu)||[]).map(x=>x.slice(1).toLowerCase()))]}
+function suggested(t){return Object.entries(rules).filter(([k,re])=>re.test(t)&&!hashtags(t).includes(k)).map(([k])=>k).slice(0,3)}
+function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
+function add(){const text=$('#newText').value.trim();if(!text)return;notes.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),text,tags:[...new Set([...hashtags(text),...suggested(text)])],created:new Date().toISOString()});$('#newText').value='';$('#suggestions').textContent='';persist()}
+$('#save').onclick=add;$('#newText').addEventListener('input',()=>{$('#suggestions').textContent=suggested($('#newText').value).map(x=>'#'+x).join('  ')});
+$('#newText').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')add()});
+$('#search').oninput=render;
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+function render(){
+const tags=[...new Set(notes.flatMap(n=>n.tags||[]))].sort();const bar=$('#tags');bar.replaceChildren();for(const t of ['all',...tags]){const b=el('button',t===filter?'active':'',t==='all'?'All':'#'+t);b.onclick=()=>{filter=t;render()};bar.append(b)}
+const q=$('#search').value.toLowerCase().trim();const shown=notes.filter(n=>(filter==='all'||(n.tags||[]).includes(filter))&&(!q||n.text.toLowerCase().includes(q)||(n.tags||[]).some(t=>t.includes(q.replace(/^#/,'')))));
+const feed=$('#feed');feed.replaceChildren();if(!shown.length){feed.append(el('div','empty',notes.length?'Nothing found in this corner of the void.':'The void is empty. For now.'));return}
+for(const n of shown){const item=el('article','entry');item.append(el('div','date',new Date(n.created).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'})),el('div','body',n.text));const ts=el('div','entryTags');for(const t of n.tags||[]){const b=el('button','', '#'+t);b.onclick=()=>{filter=t;render()};ts.append(b)}item.append(ts);
+const acts=el('div','entryActions'),edit=el('button','','Edit'),del=el('button','','Delete');edit.onclick=()=>{const value=prompt('Edit this thought:',n.text);if(value===null||!value.trim())return;n.text=value.trim();n.tags=[...new Set([...hashtags(n.text),...(n.tags||[])])];persist()};del.onclick=()=>{if(confirm('Delete this thought?')){notes=notes.filter(x=>x.id!==n.id);persist()}};acts.append(edit,del);item.append(acts);feed.append(item)}
+}
+$('#export').onclick=()=>{const blob=new Blob([JSON.stringify({app:'The Void',version:1,exported:new Date().toISOString(),notes},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='the-void-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('#import').onclick=()=>$('#file').click();$('#file').onchange=async e=>{try{const data=JSON.parse(await e.target.files[0].text());if(!Array.isArray(data.notes))throw Error('Invalid backup');if(!confirm('Import this backup? Existing entries will be preserved.'))return;const ids=new Set(notes.map(n=>n.id));for(const n of data.notes){if(typeof n.text==='string'&&!ids.has(n.id)){notes.push(n);ids.add(n.id)}}notes.sort((a,b)=>new Date(b.created)-new Date(a.created));persist()}catch(err){alert('Could not import backup: '+err.message)}e.target.value=''};
+render();
+</script></body></html>
