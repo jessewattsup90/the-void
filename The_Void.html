@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Void</title><style>
+:root{--paper:#f5ecdc;--ink:#28231f;--muted:#796d63;--chip:#e9dac8;--accent:#77463f}
+*{box-sizing:border-box}body{margin:0;background:#171b25;color:var(--ink);font-family:Georgia,serif}
+.sky{min-height:100vh;background:radial-gradient(ellipse at 70% 5%,#72504c 0,transparent 38%),linear-gradient(#151b2a 0%,#333040 42%,#9b6556 100%);padding:25px 16px 70px}
+.shell{max-width:790px;margin:auto}.brand{text-align:center;color:#f6e9d8;padding:20px 0 25px}.star{font-size:31px}.brand h1{font-size:48px;font-style:italic;font-weight:400;margin:3px}.brand small{letter-spacing:3px;font:10px system-ui}
+.paper{background:var(--paper);border-radius:23px;padding:24px;box-shadow:0 12px 55px #0005}
+.capture{display:flex;gap:8px;align-items:center;margin-bottom:16px}button,input,textarea{font:inherit}
+#newText{width:100%;min-height:65px;resize:vertical;border:1px solid #d8c7b3;background:#fff9f0;border-radius:16px;padding:13px;color:var(--ink)}
+.actions{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+button{border:0;border-radius:22px;padding:10px 15px;background:var(--chip);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);color:white}button:hover{filter:brightness(.96)}
+#search{width:100%;padding:12px;border-radius:12px;border:1px solid #d8c7b3;background:#fff9f0;margin:0 0 15px}
+.tags{display:flex;gap:7px;overflow-x:auto;padding-bottom:15px}.tags button{white-space:nowrap;font:13px system-ui}.tags button.active{background:#302922;color:white}
+.entry{padding:18px 0;border-top:1px solid #ddcfbf}.date{font:12px system-ui;color:var(--muted);margin-bottom:9px}.body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:20px;line-height:1.43}
+.entryTags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.entryTags button{font:12px system-ui;padding:6px 10px}
+.entryActions{display:flex;gap:6px;margin-top:12px}.entryActions button{font:12px system-ui;background:transparent;border:1px solid #d7c6b2;padding:5px 11px}
+.empty{text-align:center;color:var(--muted);padding:40px 0;font-style:italic}
+.footer{text-align:center;color:#e4d6cc;font:12px system-ui;margin-top:18px}
+@media(min-width:700px){.sky{padding-top:40px}.paper{padding:35px}.brand h1{font-size:58px}}
+</style></head><body><main class="sky"><div class="shell">
+<header class="brand"><div class="star">✳</div><h1>The Void</h1><small>IDEAS · THOUGHTS · SONGS · NOTES</small></header>
+<section class="paper"><textarea id="newText" placeholder="What's on your mind? Add #hashtags if you like."></textarea>
+<div class="actions"><span id="suggestions" style="font:12px system-ui;color:#796d63"></span><button class="primary" id="save">✳ Send into the void</button></div>
+<input id="search" type="search" placeholder="Search your void…"><div class="tags" id="tags"></div><div id="feed"></div>
+<div class="actions" style="margin-top:25px"><button id="export">Export backup</button><button id="import">Import backup</button><input type="file" id="file" accept=".json,application/json" hidden></div>
+</section><div class="footer">Your thoughts stay in this browser until you export or move them.</div></div></main>
+<script>
+const KEY='the-void-notes-v1';let notes=[],filter='all';const $=s=>document.querySelector(s);
+try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch{notes=[]}
+const rules={songwriting:/song|lyric|melody|chord|verse|chorus/i,reading:/book|read|author|quote/i,reflection:/feel|wonder|think|meaning|life|acceptance/i,ideas:/idea|what if|imagine/i,todo:/need to|remember to|look into|buy |call |email /i,music:/guitar|gig|venue|record|music/i};
+function hashtags(t){return [...new Set((t.match(/#[\p{L}\p{N}_-]+/gu)||[]).map(x=>x.slice(1).toLowerCase()))]}
+function suggested(t){return Object.entries(rules).filter(([k,re])=>re.test(t)&&!hashtags(t).includes(k)).map(([k])=>k).slice(0,3)}
+function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render()}
+function add(){const text=$('#newText').value.trim();if(!text)return;notes.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),text,tags:[...new Set([...hashtags(text),...suggested(text)])],created:new Date().toISOString()});$('#newText').value='';$('#suggestions').textContent='';persist()}
+$('#save').onclick=add;$('#newText').addEventListener('input',()=>{$('#suggestions').textContent=suggested($('#newText').value).map(x=>'#'+x).join('  ')});
+$('#newText').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')add()});
+$('#search').oninput=render;
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+function render(){
+const tags=[...new Set(notes.flatMap(n=>n.tags||[]))].sort();const bar=$('#tags');bar.replaceChildren();for(const t of ['all',...tags]){const b=el('button',t===filter?'active':'',t==='all'?'All':'#'+t);b.onclick=()=>{filter=t;render()};bar.append(b)}
+const q=$('#search').value.toLowerCase().trim();const shown=notes.filter(n=>(filter==='all'||(n.tags||[]).includes(filter))&&(!q||n.text.toLowerCase().includes(q)||(n.tags||[]).some(t=>t.includes(q.replace(/^#/,'')))));
+const feed=$('#feed');feed.replaceChildren();if(!shown.length){feed.append(el('div','empty',notes.length?'Nothing found in this corner of the void.':'The void is empty. For now.'));return}
+for(const n of shown){const item=el('article','entry');item.append(el('div','date',new Date(n.created).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'})),el('div','body',n.text));const ts=el('div','entryTags');for(const t of n.tags||[]){const b=el('button','', '#'+t);b.onclick=()=>{filter=t;render()};ts.append(b)}item.append(ts);
+const acts=el('div','entryActions'),edit=el('button','','Edit'),del=el('button','','Delete');edit.onclick=()=>{const value=prompt('Edit this thought:',n.text);if(value===null||!value.trim())return;n.text=value.trim();n.tags=[...new Set([...hashtags(n.text),...(n.tags||[])])];persist()};del.onclick=()=>{if(confirm('Delete this thought?')){notes=notes.filter(x=>x.id!==n.id);persist()}};acts.append(edit,del);item.append(acts);feed.append(item)}
+}
+$('#export').onclick=()=>{const blob=new Blob([JSON.stringify({app:'The Void',version:1,exported:new Date().toISOString(),notes},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='the-void-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('#import').onclick=()=>$('#file').click();$('#file').onchange=async e=>{try{const data=JSON.parse(await e.target.files[0].text());if(!Array.isArray(data.notes))throw Error('Invalid backup');if(!confirm('Import this backup? Existing entries will be preserved.'))return;const ids=new Set(notes.map(n=>n.id));for(const n of data.notes){if(typeof n.text==='string'&&!ids.has(n.id)){notes.push(n);ids.add(n.id)}}notes.sort((a,b)=>new Date(b.created)-new Date(a.created));persist()}catch(err){alert('Could not import backup: '+err.message)}e.target.value=''};
+render();
+</script></body></html>
